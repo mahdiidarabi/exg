@@ -8,10 +8,12 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"gitlab.com/mahdiidarabi/exg/dbexg"
 )
 
-func Auth() {
-	fmt.Println("package authexg imported")
+func Register(c *gin.Context) {
+	fmt.Println("this is register in authexg package")
+	dbexg.AddUser(c)
 }
 
 func CreateToken(c *gin.Context) {
