@@ -48,6 +48,7 @@ func CreateToken(c *gin.Context) {
 	token, err := at.SignedString([]byte(secret))
 	if err != nil {
 		fmt.Println("got err in creating token")
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 	}
 	c.JSON(http.StatusOK, gin.H{"token": token})
 }

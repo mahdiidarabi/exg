@@ -22,18 +22,18 @@ func main() {
 	r := gin.Default()
 
 	public := r.Group("/")
-	public.POST("/createtable", dbexg.CreateTable)
 	public.POST("/register", authexg.Register)
 	public.POST("/login", authexg.Login)
 
 	private := r.Group("/user")
 	private.Use(jwt.Auth(os.Getenv("ACCESS_SECRET")))
 
+	private.POST("/createtable", dbexg.CreateTable)
 	private.GET("/:email", dbexg.GetUser)
 	private.GET("/", dbexg.GetAllUsers)
 	private.DELETE("/:email", dbexg.DeleteUser)
 	private.PATCH("/:email", dbexg.UpdateUser)
-	private.PUT("/:email", dbexg.UpdateUser)
+	//private.PUT("/:email", dbexg.UpdateUser)
 
 	r.Run("localhost:8080")
 }

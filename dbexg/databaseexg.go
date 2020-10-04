@@ -20,9 +20,8 @@ func SetConnection() (*gorm.DB, error) {
 	if err != nil {
 		fmt.Println("got error in loading .env")
 	}
-	dsn := fmt.Sprintf("user=%s password=%s dbname=%s port=%s sslmode=disable",
+	var dsn = fmt.Sprintf("user=%s password=%s dbname=%s port=%s sslmode=disable",
 		os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"), os.Getenv("DB_PORT"))
-
 	fmt.Println(dsn)
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -37,12 +36,22 @@ func SetConnection() (*gorm.DB, error) {
 
 func CreateTable(c *gin.Context) {
 
-	err := DB.AutoMigrate(&model.User{})
-	if err != nil {
-		fmt.Println("got error in createTable")
-		panic(err)
+	if DB.Migrator().HasTable(&model.User{}) {
+
+		var s =fmt.Sprintf("We already have a table, so dont create a new one")
+		c.JSON(http.StatusOK, gin.H{"data": s})
+
+	} else {
+
+		err := DB.AutoMigrate(&model.User{})
+		if err != nil {
+			var s =fmt.Sprintf("got error in createTable")
+			c.JSON(http.StatusBadRequest, gin.H{"data": s})
+		}
+		var s = fmt.Sprintf("Successfully migrated ( table created)")
+		c.JSON(http.StatusOK, gin.H{"data": s})
+
 	}
-	fmt.Println("SUccessfully migrated ( table created)")
 }
 
 func AddUser(c *gin.Context) {
@@ -56,9 +65,11 @@ func AddUser(c *gin.Context) {
 	result := DB.Create(&user)
 	if result.Error != nil {
 		fmt.Println("got error in addUser, when creating DB row")
+		c.JSON(http.StatusBadRequest, gin.H{"error": result.Error})
 	}
 
 	fmt.Println("Successfully user added")
+	c.JSON(http.StatusOK, gin.H{"user added to database": user})
 
 }
 
@@ -76,7 +87,11 @@ func DeleteUser(c *gin.Context) {
 		fmt.Println("got error in deleteUser in dbexg package")
 	}
 
-	DB.Delete(&output)
+	result := DB.Delete(&output)
+	if result.Error != nil {
+		fmt.Println("got error in deleteUser, when deleting DB row")
+		c.JSON(http.StatusBadRequest, gin.H{"error": result.Error})
+	}
 
 	c.JSON(http.StatusOK, gin.H{"data": output})
 }
@@ -95,7 +110,12 @@ func UpdateUser(c *gin.Context) {
 		fmt.Println("got error in updateUser in dbexg package")
 	}
 
-	DB.Model(&output).Updates(input)
+	result := DB.Model(&output).Updates(input)
+	if result.Error != nil {
+		fmt.Println("got error in updateUser, when updating DB row")
+		c.JSON(http.StatusBadRequest, gin.H{"error": result.Error})
+	}
+
 	c.JSON(http.StatusOK, gin.H{"data": output})
 
 }
@@ -103,7 +123,12 @@ func UpdateUser(c *gin.Context) {
 func GetAllUsers(c *gin.Context) {
 	var users []model.User
 
-	DB.Find(&users)
+	result := DB.Find(&users)
+
+	if result.Error != nil {
+		fmt.Println("got error in getAllUsers, when fetching DB rows")
+		c.JSON(http.StatusBadRequest, gin.H{"error": result.Error})
+	}
 
 	fmt.Println("getAllUsers function in dbexg package")
 
@@ -125,8 +150,6 @@ func GetUser(c *gin.Context) {
 		fmt.Printf("got error in getUser in dbexg package. email")
 
 	}
-
-	fmt.Println(c.Request.URL)
 
 	c.JSON(http.StatusOK, gin.H{"data": output})
 }
