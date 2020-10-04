@@ -35,6 +35,16 @@ func SetConnection() (*gorm.DB, error) {
 	return DB, nil
 }
 
+func CreateTable(c *gin.Context) {
+
+	err := DB.AutoMigrate(&model.User{})
+	if err != nil {
+		fmt.Println("got error in createTable")
+		panic(err)
+	}
+	fmt.Println("SUccessfully migrated ( table created)")
+}
+
 func AddUser(c *gin.Context) {
 	var user model.User
 
@@ -52,12 +62,83 @@ func AddUser(c *gin.Context) {
 
 }
 
-func CreateTable(c *gin.Context) {
+func DeleteUser(c *gin.Context) {
 
-	err := DB.AutoMigrate(&model.User{})
-	if err != nil {
-		fmt.Println("got error in createTable")
-		panic(err)
+	var input model.User
+	var output model.User
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided in deleteUser function in dbexg package")
 	}
-	fmt.Println("SUccessfully migrated ( table created)")
+
+	if err := DB.First(&output, "Email = ?", input.Email).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+		fmt.Println("got error in deleteUser in dbexg package")
+	}
+
+	DB.Delete(&output)
+
+	c.JSON(http.StatusOK, gin.H{"data": output})
+}
+
+func UpdateUser(c *gin.Context) {
+
+	var input model.User
+	var output model.User
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided in updateUser function in dbexg package")
+	}
+
+	if err := DB.First(&output, "Email = ?", input.Email).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+		fmt.Println("got error in updateUser in dbexg package")
+	}
+
+	DB.Model(&output).Updates(input)
+	c.JSON(http.StatusOK, gin.H{"data": output})
+
+}
+
+func GetAllUsers(c *gin.Context) {
+	var users []model.User
+
+	DB.Find(&users)
+
+	fmt.Println("getAllUsers function in dbexg package")
+
+	c.JSON(http.StatusOK, gin.H{"data": users})
+
+}
+
+func GetUser(c *gin.Context) {
+
+	// var input model.User
+	var output model.User
+
+	// if err := c.ShouldBindJSON(&input); err != nil {
+	// 	c.JSON(http.StatusUnprocessableEntity, "Invalid json provided in getUser function in dbexg package")
+	// }
+
+	if err := DB.First(&output, "Email = ?", c.Request.Header["Email"]).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found"})
+		fmt.Printf("got error in getUser in dbexg package. email")
+
+	}
+
+	fmt.Println(c.Request.URL)
+
+	c.JSON(http.StatusOK, gin.H{"data": output})
+}
+
+func GetUserbyEmail(email string) *model.User {
+
+	var user model.User
+
+	if err := DB.First(&user, "Email = ?", email).Error; err != nil {
+		fmt.Println("got error in getUserbyEmail in dbexg package")
+		return nil
+	}
+
+	return &user
 }

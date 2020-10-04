@@ -9,11 +9,32 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"gitlab.com/mahdiidarabi/exg/dbexg"
+	"gitlab.com/mahdiidarabi/exg/model"
 )
 
 func Register(c *gin.Context) {
 	fmt.Println("this is register in authexg package")
 	dbexg.AddUser(c)
+}
+
+func Login(c *gin.Context) {
+
+	var input model.User
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided in login api")
+		panic(err)
+	}
+
+	output := dbexg.GetUserbyEmail(input.Email)
+
+	// TODO
+	//compare the user from the request, with the one we defined:
+	if input.Email != output.Email || input.Password != output.Password {
+		c.JSON(http.StatusUnauthorized, "Invalid username or password")
+	} else {
+		CreateToken(c)
+	}
 }
 
 func CreateToken(c *gin.Context) {
