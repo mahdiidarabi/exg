@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b92ac4a1-eb63-46a1-9e29-a2563fb5be89" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/authexg/authorizationexg_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dbexg/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dbexg/databaseexg_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dbexg/databaseexg.go" beforeDir="false" afterPath="$PROJECT_DIR$/dbexg/databaseexg.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/model.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dbexg/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/dbexg/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/main_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
