@@ -24,6 +24,7 @@ func main() {
 	public := r.Group("/")
 	public.POST("/register", authexg.Register)
 	public.POST("/login", authexg.Login)
+	public.GET("/", dbexg.GetAllUsers)
 
 	private := r.Group("/user")
 	private.Use(jwt.Auth(os.Getenv("ACCESS_SECRET")))

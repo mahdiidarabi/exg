@@ -69,7 +69,7 @@ func AddUser(c *gin.Context) {
 	}
 
 	fmt.Println("Successfully user added")
-	c.JSON(http.StatusOK, gin.H{"user added to database": user})
+	c.JSON(http.StatusOK, gin.H{"Data": user})
 
 }
 

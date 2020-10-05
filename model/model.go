@@ -17,3 +17,7 @@ type User struct {
 	EosBalance  float64 `gorm:"default:0"`
 	// Coins [7]float64 `gorm:"default:0"`
 }
+
+type Result struct {
+	Data User
+}
