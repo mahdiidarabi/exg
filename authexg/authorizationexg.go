@@ -44,7 +44,7 @@ func CreateToken(c *gin.Context) {
 	atClaims := jwt.MapClaims{}
 	atClaims["isAdmin"] = false
 	atClaims["authorized"] = true
-	atClaims["user_email"] = "email"
+	atClaims["user_email"] = c.Request.Header["Email"]
 	atClaims["exp"] = time.Now().Add(time.Minute * 15).Unix()
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 	token, err := at.SignedString([]byte(secret))
@@ -56,6 +56,9 @@ func CreateToken(c *gin.Context) {
 }
 
 func ExtractToken(c *gin.Context) {
+
+	fmt.Println(c.Request.Header["Email"])
+
 	bearerToken := c.Request.Header.Get("Authorization")
 	//
 	fmt.Println(bearerToken)
