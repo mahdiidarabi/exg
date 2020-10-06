@@ -25,6 +25,7 @@ func main() {
 	public.POST("/register", authexg.Register)
 	public.POST("/login", authexg.Login)
 	public.GET("/", dbexg.GetAllUsers)
+	public.GET("/gettoken", authexg.ExtractToken)
 
 	private := r.Group("/user")
 	private.Use(jwt.Auth(os.Getenv("ACCESS_SECRET")))
@@ -34,7 +35,6 @@ func main() {
 	private.GET("/", dbexg.GetAllUsers)
 	private.DELETE("/:email", dbexg.DeleteUser)
 	private.PATCH("/:email", dbexg.UpdateUser)
-	//private.PUT("/:email", dbexg.UpdateUser)
 
 	r.Run("localhost:8080")
 }
