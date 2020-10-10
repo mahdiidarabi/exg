@@ -5,10 +5,10 @@ import (
 )
 
 var User00 = model.User{
-	Username:    "mahdi135",
-	Email:       "mahdi@gmail.com135",
-	Phone:       "phone135",
-	Password:    "mahdipass135",
+	Username:    "mahdi235",
+	Email:       "mahdi@gmail.com235",
+	Phone:       "phone235",
+	Password:    "mahdipass235",
 	BtcBalance:  0,
 	EthBalance:  0,
 	DashBalance: 0,
@@ -20,10 +20,10 @@ var User00 = model.User{
 
 // the user01 is same as user00 except one field
 var User01 = model.User{
-	Username:    "mahdi135",
-	Email:       "mahdi@gmail.com135",
-	Phone:       "phone136",
-	Password:    "mahdipass135",
+	Username:    "mahdi235",
+	Email:       "mahdi@gmail.com235",
+	Phone:       "phone236",
+	Password:    "mahdipass235",
 	BtcBalance:  0,
 	EthBalance:  0,
 	DashBalance: 0,
@@ -34,10 +34,10 @@ var User01 = model.User{
 }
 
 var User10 = model.User{
-	Username:    "mahdi195",
-	Email:       "mahdi@gmail.com195",
-	Phone:       "phone195",
-	Password:    "mahdipass195",
+	Username:    "mahdi295",
+	Email:       "mahdi@gmail.com295",
+	Phone:       "phone295",
+	Password:    "mahdipass295",
 	BtcBalance:  0,
 	EthBalance:  0,
 	DashBalance: 0,
@@ -48,10 +48,10 @@ var User10 = model.User{
 }
 
 var User11 = model.User{
-	Username:    "mahdi195",
-	Email:       "mahdi@gmail.com195",
-	Phone:       "phone196",
-	Password:    "mahdipass195",
+	Username:    "mahdi295",
+	Email:       "mahdi@gmail.com295",
+	Phone:       "phone296",
+	Password:    "mahdipass295",
 	BtcBalance:  0,
 	EthBalance:  0,
 	DashBalance: 0,
