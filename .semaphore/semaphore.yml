@@ -36,7 +36,7 @@ blocks:
       jobs:
         - name: Test
           commands:
-            - go test
+            - go test ./dbexg
   - name: build
     task:
       env_vars:
