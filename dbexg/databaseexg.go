@@ -2,14 +2,12 @@ package dbexg
 
 import (
 	"fmt"
-	"net/http"
-	"os"
-
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gitlab.com/mahdiidarabi/exg/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"net/http"
 )
 
 var DB *gorm.DB
@@ -20,9 +18,11 @@ func SetConnection() (*gorm.DB, error) {
 	if err != nil {
 		fmt.Println("got error in loading .env")
 	}
-	var dsn = fmt.Sprintf("user=%s password=%s dbname=%s port=%s sslmode=disable",
-		os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"), os.Getenv("DB_PORT"))
-	fmt.Println(dsn)
+	//var dsn = fmt.Sprintf("user=%s password=%s dbname=%s port=%s sslmode=disable",
+	//	os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"), os.Getenv("DB_PORT"))
+	//fmt.Println(dsn)
+
+	var dsn = fmt.Sprintf("user=mahdi password=mahdipass dbname=test port=5432 sslmode=disable")
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
