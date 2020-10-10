@@ -36,7 +36,7 @@ blocks:
       jobs:
         - name: Test
           commands:
-            - go test ./dbexg
+            - go test gitlab.com/mahdiidarabi/exg
   - name: build
     task:
       env_vars:
