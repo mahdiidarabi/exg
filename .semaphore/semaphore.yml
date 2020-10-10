@@ -5,16 +5,53 @@ agent:
     type: e1-standard-2
     os_image: ubuntu1804
 blocks:
-  - name: Test
+  - name: install dependencies
     task:
       jobs:
-        - name: go test
+        - name: install
           commands:
-            - sem-version go 1.11
-            - "export GO111MODULE=on"
-            - "export GOPATH=~/go"
-            - "export PATH=/home/semaphore/go/bin:$PATH"
+            - sem-version go 1.13
             - checkout
-            - go get ./...
-            - go test ./...
-            - go build -v .
+            - 'cache restore vendor-$SEMAPHORE_GIT_BRANCH-$(checksum go.mod),vendor-$SEMAPHORE_GIT_BRANCH,vendor-master'
+            - go mod vendor
+            - 'cache store vendor-$SEMAPHORE_GIT_BRANCH-$(checksum go.mod),vendor-$SEMAPHORE_GIT_BRANCH,vendor-master vendor'
+      env_vars:
+        - name: GO111MODULE
+          value: 'on'
+        - name: GOFLAGS
+          value: '-mod=vendor'
+  - name: test
+    task:
+      env_vars:
+        - name: GO111MODULE
+          value: 'on'
+        - name: GOFLAGS
+          value: '-mod=vendor'
+      prologue:
+        commands:
+          - sem-version go 1.13
+          - checkout
+          - 'cache restore vendor-$SEMAPHORE_GIT_BRANCH-$(checksum go.mod),vendor-$SEMAPHORE_GIT_BRANCH,vendor-master'
+          - go mod vendor
+      jobs:
+        - name: Test
+          commands:
+            - go run main.go
+  - name: build
+    task:
+      env_vars:
+        - name: GO111MODULE
+          value: 'on'
+        - name: GOFLAGS
+          value: '-mod=vendor'
+      prologue:
+        commands:
+          - sem-version go 1.13
+          - checkout
+          - 'cache restore vendor-$SEMAPHORE_GIT_BRANCH-$(checksum go.mod),vendor-$SEMAPHORE_GIT_BRANCH,vendor-master'
+          - go mod vendor
+      jobs:
+        - name: Build
+          commands:
+            - go build -v -o go-gin-app
+            - artifact push project --force go-gin-app
